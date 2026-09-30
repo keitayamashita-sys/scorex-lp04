@@ -323,3 +323,19 @@ document.addEventListener('DOMContentLoaded', function () {
   sel.addEventListener('change', apply);
   apply();
 });
+
+// ===== FVフォーム内の資料スライド（→ボタンで次の資料へ） =====
+document.addEventListener('DOMContentLoaded', function () {
+  Array.prototype.forEach.call(document.querySelectorAll('.doc-carousel'), function (box) {
+    var track = box.querySelector('.doc-track');
+    var next  = box.querySelector('.doc-next');
+    if (!track || !next) return;
+    next.addEventListener('click', function () {
+      var slide = track.querySelector('img');
+      var step = slide ? slide.getBoundingClientRect().width + 10 : track.clientWidth * 0.8;
+      // 最後まで来たら先頭に戻る
+      if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 4) track.scrollTo({ left: 0, behavior: 'smooth' });
+      else track.scrollBy({ left: step, behavior: 'smooth' });
+    });
+  });
+});
