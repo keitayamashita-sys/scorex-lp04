@@ -299,28 +299,39 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-// ===== 案件一覧の業種絞り込み（相性の良い業種 → 案件一覧） =====
+// ===== 案件一覧の業種絞り込み（最初は5件、「もっと見る」で5件ずつ追加） =====
 document.addEventListener('DOMContentLoaded', function () {
   var sel   = document.getElementById('jobFilter');
   var list  = document.getElementById('jobList');
   var empty = document.getElementById('jobEmpty');
   var count = document.getElementById('jobCount');
+  var more  = document.getElementById('jobMore');
   if (!sel || !list) return;
   var cards = list.querySelectorAll('.job-card');
+  var STEP = 5;
+  var limit = STEP;
 
   var apply = function () {
     var cat = sel.value;
-    var shown = 0;
-    Array.prototype.forEach.call(cards, function (img) {
-      var hit = cat === 'all' || (img.getAttribute('data-cat') || '').split(' ').indexOf(cat) !== -1;
-      img.style.display = hit ? 'block' : 'none';
-      if (hit) shown++;
+    var hits = [];
+    Array.prototype.forEach.call(cards, function (card) {
+      var hit = cat === 'all' || (card.getAttribute('data-cat') || '').split(' ').indexOf(cat) !== -1;
+      if (hit) hits.push(card);
+      card.style.display = 'none';
     });
-    list.style.display = shown ? 'flex' : 'none';
-    if (empty) empty.style.display = shown ? 'none' : 'block';
-    if (count) count.textContent = shown ? shown + '件の案件を表示中' : '';
+    hits.forEach(function (card, i) { if (i < limit) card.style.display = 'block'; });
+    var shown = Math.min(limit, hits.length);
+    list.style.display = hits.length ? 'flex' : 'none';
+    if (empty) empty.style.display = hits.length ? 'none' : 'block';
+    if (count) count.textContent = hits.length ? '全' + hits.length + '件中 ' + shown + '件を表示中' : '';
+    if (more) {
+      var rest = hits.length - shown;
+      more.style.display = rest > 0 ? 'block' : 'none';
+      more.textContent = 'もっと見る（残り' + rest + '件）';
+    }
   };
-  sel.addEventListener('change', apply);
+  sel.addEventListener('change', function () { limit = STEP; apply(); });
+  if (more) more.addEventListener('click', function () { limit += STEP; apply(); });
   apply();
 });
 
