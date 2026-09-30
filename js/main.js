@@ -307,14 +307,20 @@ document.addEventListener('DOMContentLoaded', function () {
   var count = document.getElementById('jobCount');
   var more  = document.getElementById('jobMore');
   if (!sel || !list) return;
-  var cards = list.querySelectorAll('.job-card');
+  var cards = Array.prototype.slice.call(list.querySelectorAll('.job-card'));
+  // 「すべての案件」のときは予算総額の高い順（同額は元の順）。業種を選んだときは元の順
+  var byBudget = cards.slice().sort(function (a, b) {
+    return (+b.getAttribute('data-budget') || 0) - (+a.getAttribute('data-budget') || 0) || cards.indexOf(a) - cards.indexOf(b);
+  });
   var STEP = 5;
   var limit = STEP;
 
   var apply = function () {
     var cat = sel.value;
     var hits = [];
-    Array.prototype.forEach.call(cards, function (card) {
+    var order = cat === 'all' ? byBudget : cards;
+    order.forEach(function (card) { list.appendChild(card); });
+    order.forEach(function (card) {
       var hit = cat === 'all' || (card.getAttribute('data-cat') || '').split(' ').indexOf(cat) !== -1;
       if (hit) hits.push(card);
       card.style.display = 'none';
