@@ -116,14 +116,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </select></div>
               <div><p style="margin:0 0 6px;font-size:13px;font-weight:900;color:#123A7B">メールアドレス<span style="margin-left:6px;font-size:9.5px;font-weight:700;color:#fff;background:#1D5FD2;border-radius:4px;padding:2px 6px;vertical-align:1px">必須</span></p><input type="email" name="email" required placeholder="taro@example.co.jp" style="width:100%;box-sizing:border-box;border:1.5px solid #D8E6F8;border-radius:10px;padding:12px;font-size:14px;font-family:inherit;background:#F8FBFF">
                 <p style="margin:6px 0 0;font-size:10.5px;line-height:1.6;color:#6E7C99">※こちらのアドレスへ資料をお送りします。</p></div>
+              <div><p style="margin:0 0 6px;font-size:13px;font-weight:900;color:#123A7B">電話番号<span style="margin-left:6px;font-size:9.5px;font-weight:700;color:#fff;background:#1D5FD2;border-radius:4px;padding:2px 6px;vertical-align:1px">必須</span></p><input type="tel" name="phone" required placeholder="09012345678" autocomplete="tel" style="width:100%;box-sizing:border-box;border:1.5px solid #D8E6F8;border-radius:10px;padding:12px;font-size:14px;font-family:inherit;background:#F8FBFF">
+                <p style="margin:6px 0 0;font-size:10.5px;line-height:1.6;color:#6E7C99">※ハイフンなしでご入力いただけます。</p></div>
             </div>
             <button type="submit" id="fvSubmitBtn" class="cta" style="margin-top:20px;display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(100deg,#FFE68F 0%,#FFD24A 42%,#FFB01F 100%);color:#0B2D66;font-size:17px;font-weight:900;letter-spacing:0.01em;padding:17px 20px;border-radius:100px;box-shadow:0 10px 26px rgba(255,168,10,0.45),inset 0 1px 0 rgba(255,255,255,0.6);width:100%;border:none;cursor:pointer;font-family:inherit">無料で資料を受け取る<span style="display:inline-flex;width:24px;height:24px;border-radius:50%;background:#0B2D66;color:#FFD24A;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">→</span></button>
             <p style="margin:8px 0 0;text-align:center;font-size:10.5px;color:#6E7C99">送信により<a href="https://scorex.co.jp/privacy.html" target="_blank" rel="noopener" style="text-decoration:underline">プライバシーポリシー</a>に同意したものとみなされます</p>
             <button type="button" class="fvq-back" style="display:block;margin:12px auto 0;background:none;border:none;padding:4px 8px;font-family:inherit;font-size:12px;font-weight:700;color:#6E7C99;cursor:pointer">← 前の質問に戻る</button>
           </div>
-          <!-- FVフォームでは聞かない項目。下部フォームと同じ項目名で空欄のまま送信し、スプシ側の列がずれないようにする -->
+          <!-- FVフォームでは聞かない項目（興味を持ったポイント）。下部フォームと同じ項目名で空欄のまま送信し、スプシ側の列がずれないようにする -->
           <input type="hidden" name="interest_point" value="">
-          <input type="hidden" name="phone" value="">
           <input type="hidden" name="form_location" value="FVフォーム">
           <input type="hidden" name="page_url">
           <input type="hidden" name="landing_url">
