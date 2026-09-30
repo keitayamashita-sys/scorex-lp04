@@ -1,0 +1,167 @@
+/* SCORE X LP 共通スタイル */
+html,body{margin:0;padding:0;background:#F0EBDB;}
+html{scroll-behavior:smooth;}
+/* 追従ヘッダー分だけアンカー位置をずらす */
+section[id]{scroll-margin-top:60px;}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+body{font-family:'Noto Sans JP',sans-serif;-webkit-font-smoothing:antialiased;color:#1E2B45;letter-spacing:0.01em;}
+p{font-weight:500;}
+strong{font-weight:900;}
+h1,h2,h3{letter-spacing:0.01em;}
+a{color:#1D5FD2;text-decoration:none;}
+a:hover{color:#123A7B;}
+input::placeholder{color:#AAB6CC;}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes marqueeRev{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+/* CTAボタンのホバー */
+a.cta{transition:transform .2s ease;}
+a.cta:hover{transform:translateY(-2px);}
+/* フォーム入力のフォーカス */
+input:focus,select:focus{border-color:#1D5FD2 !important;outline:none;background:#fff !important;}
+/* フォーム選択肢のホバー */
+label:hover{border-color:#1D5FD2 !important;background:#F9FBFE !important;}
+/* プルダウン（現在の課題／興味を持ったポイント） */
+select.form-select{
+  width:100%;box-sizing:border-box;
+  border:1.5px solid #D8E6F8;border-radius:10px;
+  padding:14px 40px 14px 14px;
+  font-size:14px;font-family:inherit;font-weight:500;
+  color:#1E2B45;background-color:#F8FBFF;
+  -webkit-appearance:none;appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2012%208'%3E%3Cpath%20d='M1%201l5%205%205-5'%20stroke='%231D5FD2'%20stroke-width='2'%20fill='none'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;background-size:12px 8px;
+}
+select.form-select:invalid{color:#8A97B0;}
+
+/* ===== 画像拡大（PC:ホバープレビュー／全画面ギャラリー・SP:タップで横画面） ===== */
+.zoomable{cursor:zoom-in;}
+@media (hover:hover) and (pointer:fine){
+  .zoomable:hover{box-shadow:0 0 0 2.5px #1D5FD2;}
+}
+
+/* ホバー時のクイックプレビュー（PCのみ・クリック透過）
+   パネルを固定サイズにして、画像の元寸法が違っても拡大時の大きさを揃える */
+#zoomPeek{
+  position:fixed;top:50%;left:50%;z-index:900;
+  width:min(92vw,980px);height:min(74vh,560px);
+  box-sizing:border-box;display:flex;flex-direction:column;
+  transform:translate(-50%,-50%) scale(0.97);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .16s ease,transform .16s ease,visibility .16s;
+  padding:12px;border-radius:14px;background:rgba(255,255,255,0.97);
+  box-shadow:0 26px 70px rgba(4,18,50,0.45);
+}
+#zoomPeek.is-visible{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1);}
+#zoomPeek img{flex:1 1 auto;min-height:0;width:100%;height:100%;object-fit:contain;display:block;border-radius:8px;}
+#zoomPeek p{flex:0 0 auto;margin:10px 0 2px;text-align:center;font-size:12px;font-weight:700;color:#123A7B;}
+
+/* 全画面ギャラリー */
+#zoomOverlay{
+  position:fixed;inset:0;z-index:1000;display:none;
+  background:rgba(6,18,42,0.95);opacity:0;transition:opacity .18s ease;
+}
+#zoomOverlay.is-open{display:block;}
+#zoomOverlay.is-visible{opacity:1;}
+/* 表示ステージ（SPの縦持ち時はこれごと90度回転させる） */
+#zoomStage{position:absolute;left:0;top:0;width:100%;height:100%;}
+#zoomOverlay.is-rotated #zoomStage{
+  width:100vh;height:100vw;          /* 古いブラウザ向けフォールバック */
+  width:100dvh;height:100dvw;        /* アドレスバー分を除いた実寸 */
+  transform:rotate(90deg) translateY(-100%);
+  transform-origin:top left;
+}
+/* 横スライド用トラック */
+#zoomTrack{
+  position:absolute;inset:0;display:flex;
+  overflow-x:auto;overflow-y:hidden;
+  scroll-snap-type:x mandatory;scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+#zoomTrack::-webkit-scrollbar{display:none;}
+.zoom-slide{
+  flex:0 0 100%;width:100%;height:100%;box-sizing:border-box;
+  scroll-snap-align:center;scroll-snap-stop:always;
+  display:flex;align-items:center;justify-content:center;
+  padding:54px 58px 46px;
+}
+/* 画像はスライド枠いっぱいに収める＝どの画像でも拡大サイズが揃う */
+.zoom-slide img{
+  width:100%;height:100%;object-fit:contain;display:block;
+  border-radius:8px;filter:drop-shadow(0 18px 50px rgba(0,0,0,0.5));
+}
+/* 前後ボタン */
+.zoom-nav{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:46px;height:46px;border:none;border-radius:50%;
+  background:rgba(255,255,255,0.92);color:#0B2D66;
+  font-size:26px;font-weight:900;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 18px rgba(0,0,0,0.35);
+}
+.zoom-nav:hover{background:#fff;}
+#zoomPrev{left:8px;}
+#zoomNext{right:8px;}
+#zoomOverlay.is-single .zoom-nav{display:none;}
+#zoomClose{
+  position:absolute;top:10px;right:10px;width:44px;height:44px;
+  border:none;border-radius:50%;background:rgba(255,255,255,0.95);color:#0B2D66;
+  font-size:23px;font-weight:900;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 18px rgba(0,0,0,0.3);z-index:2;
+}
+#zoomCaption{
+  position:absolute;left:0;right:0;bottom:8px;margin:0;padding:0 60px;
+  text-align:center;font-size:12px;font-weight:700;color:rgba(255,255,255,0.85);
+  pointer-events:none;
+}
+/* SPは余白を詰めて画像を最大化 */
+@media (max-width:767px){
+  .zoom-slide{padding:38px 44px 34px;}
+  .zoom-nav{width:40px;height:40px;font-size:22px;}
+  #zoomPrev{left:4px;}
+  #zoomNext{right:4px;}
+}
+@media (prefers-reduced-motion:reduce){
+  #zoomPeek,#zoomOverlay{transition:none;}
+  #zoomTrack{scroll-behavior:auto;}
+}
+
+/* ===== 案件掲示板UI（FV／SCORE Xセクション）のタブ ===== */
+.board-tab{
+  font-family:inherit;font-size:9.5px;font-weight:700;line-height:1.4;
+  color:rgba(255,255,255,0.58);background:rgba(255,255,255,0.09);
+  border:0;padding:5px 10px;border-radius:5px 5px 0 0;
+  white-space:nowrap;flex-shrink:0;cursor:pointer;
+  -webkit-appearance:none;appearance:none;
+  transition:background .18s ease,color .18s ease;
+}
+.board-tab:hover{background:rgba(255,255,255,0.18);color:rgba(255,255,255,0.85);}
+.board-tab.is-active,.board-tab.is-active:hover{background:#2A6CCB;color:#fff;font-weight:800;}
+.board-count{
+  margin-left:auto;padding-bottom:5px;font-size:9px;font-weight:700;
+  color:rgba(255,255,255,0.6);white-space:nowrap;flex-shrink:0;
+}
+.board-ui img.is-hidden{display:none !important;}
+
+/* 掲示板UIの「リアルタイム稼働中」を示す緑丸（ゆっくり脈打つ） */
+.board-live{animation:boardLive 2s ease-out infinite;}
+@keyframes boardLive{
+  0%{box-shadow:0 0 0 0 rgba(74,222,128,0.55);opacity:1;}
+  70%{box-shadow:0 0 0 7px rgba(74,222,128,0);opacity:.75;}
+  100%{box-shadow:0 0 0 0 rgba(74,222,128,0);opacity:1;}
+}
+@media (prefers-reduced-motion:reduce){.board-live{animation:none;}}
+
+/* ===== FVフォームの選択肢（質問形式） ===== */
+.fvq-opt{
+  display:flex;align-items:center;gap:12px;width:100%;box-sizing:border-box;
+  padding:14px 14px;border:2px solid #D8E6F8;border-radius:10px;background:#fff;
+  font-family:inherit;font-size:14px;font-weight:800;line-height:1.5;color:#1E2B45;text-align:left;
+  cursor:pointer;-webkit-appearance:none;appearance:none;transition:border-color .15s ease,background .15s ease;
+}
+.fvq-opt:hover{border-color:#1D5FD2;}
+.fvq-radio{flex-shrink:0;width:18px;height:18px;border-radius:50%;border:2px solid #AAB6CC;box-sizing:border-box;position:relative;}
+.fvq-opt.is-selected{border-color:#1D5FD2;background:#EDF4FD;color:#123A7B;}
+.fvq-opt.is-selected .fvq-radio{border-color:#1D5FD2;}
+.fvq-opt.is-selected .fvq-radio::after{content:"";position:absolute;inset:3px;border-radius:50%;background:#1D5FD2;}
